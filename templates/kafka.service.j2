@@ -1,0 +1,14 @@
+[Unit]
+Description=Kafka
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory={{kafka_app_home}}
+ExecStart={{kafka_app_home}}/bin/kafka-server-start.sh {{kafka_app_home}}/config/server.properties
+ExecStop={{kafka_app_home}}/bin/kafka-server-stop.sh
+Type=simple
+User={{kafka_user}}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,100 @@
+- name: "Create Kafka group"
+  group:
+    name: "{{ kafka_group }}"
+  become: true
+
+- name: "Create Kafka user"
+  user:
+    name: "{{ kafka_user }}"
+    comment: "John Doe"
+    group: "{{ kafka_group }}"
+    home: "{{ kafka_home }}"
+  become: true
+
+- name: "Install Java"
+  package:
+    name: "openjdk-8-jdk-headless"
+    state: "latest"
+  become: true
+
+- name: "Download Kafka and unarchive"
+  unarchive:
+    src: "{{ kafka_download_url }}"
+    dest: "{{ kafka_home }}"
+    remote_src: yes
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+  become: true
+
+- name: "Create symlink in Kafka home directory"
+  file:
+    src: "{{ kafka_home }}/{{ kafka_file_prefix }}"
+    dest: "{{ kafka_app_home }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    state: link
+  become: true
+
+- name: "Update Kafka server.properties"
+  lineinfile:
+    path: "{{ kafka_app_home }}/config/server.properties"
+    regexp: '^#?broker.id'
+    line: "#broker.id=-1"
+  become: true
+
+- name: "Copy update kafka property script"
+  copy:
+    src: update-kafka-property.sh
+    dest: "{{ kafka_app_home }}/bin/update-kafka-property.sh"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_group }}"
+    mode: "u=rwx,g=x,o=x"
+  become: true
+
+
+
+- name: "Install kafka embedded zookeeper service unit"
+  template:
+    src: zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: 0555
+  when: "( embedded_zookeeper_enabled|default(embedded_zookeeper_enabled) )"
+  become: true
+
+- name: "Ensure Kafka embedded zookeeper is running and set to start on boot."
+  service:
+    name: zookeeper
+    state: started
+    enabled: yes
+  when: "( embedded_zookeeper_enabled|default(embedded_zookeeper_enabled) )"
+  become: true
+
+- name: "Install Kafka service unit"
+  template:
+    src: kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+    owner: root
+    group: root
+    mode: 0555
+  become: true
+
+- name: "Ensure Kafka is running and set to start on boot."
+  service:
+    name: kafka
+    state: started
+    enabled: yes
+  become: true
+
+
+- name: "Add Kafka log rotation"
+  template:
+    src: kafka.logrotate.j2
+    dest: /etc/logrotate.d/kafka
+    owner: root
+    group: root
+    mode: 0544
+  become: true
+
+

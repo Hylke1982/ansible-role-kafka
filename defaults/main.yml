@@ -1,0 +1,9 @@
+kafka_user: kafka
+kafka_group: kafka
+kafka_home: /opt/kafka
+
+kafka_file_prefix: kafka_2.12-1.0.0
+kafka_download_url: "http://mirror.koddos.net/apache/kafka/1.0.0/{{ kafka_file_prefix }}.tgz"
+kafka_app_home: "{{ kafka_home }}/kafka"
+
+embedded_zookeeper_enabled: true

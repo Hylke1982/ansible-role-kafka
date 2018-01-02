@@ -1,0 +1,17 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: Hylke Stapersma
+  description: Kafka server
+  company: "Midwestern Mac, LLC"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.2
+  platforms:
+    - name: Ubuntu
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all

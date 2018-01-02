@@ -1,0 +1,8 @@
+{{ kafka_app_home }}/logs/*.log {
+    daily
+    rotate 5
+    maxsize 20m
+    compress
+    notifempty
+    nocreate
+}
