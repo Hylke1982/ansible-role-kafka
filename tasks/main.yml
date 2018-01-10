@@ -1,3 +1,8 @@
+- name: Include vars of stuff.yml into the 'stuff' variable (2.2).
+  include_vars:
+    file: zookeeper_embedded_enabled.yml
+  when: "( embedded_zookeeper_enabled|default(embedded_zookeeper_enabled) )"
+
 - name: "Create Kafka group"
   group:
     name: "{{ kafka_group }}"
@@ -51,16 +56,13 @@
     mode: "u=rwx,g=x,o=x"
   become: true
 
-
-
 - name: "Install kafka embedded zookeeper service unit"
   template:
     src: zookeeper.service.j2
-    dest: /etc/systemd/system/zookeeper.service
+    dest: /lib/systemd/system/zookeeper.service
     owner: root
     group: root
     mode: 0555
-  when: "( embedded_zookeeper_enabled|default(embedded_zookeeper_enabled) )"
   become: true
 
 - name: "Ensure Kafka embedded zookeeper is running and set to start on boot."
@@ -68,13 +70,12 @@
     name: zookeeper
     state: started
     enabled: yes
-  when: "( embedded_zookeeper_enabled|default(embedded_zookeeper_enabled) )"
   become: true
 
 - name: "Install Kafka service unit"
   template:
     src: kafka.service.j2
-    dest: /etc/systemd/system/kafka.service
+    dest: /lib/systemd/system/kafka.service
     owner: root
     group: root
     mode: 0555
@@ -83,8 +84,8 @@
 - name: "Ensure Kafka is running and set to start on boot."
   service:
     name: kafka
-    state: started
-    enabled: yes
+    state: "{{kafka_embedded_state}}"
+    enabled: "{{kafka_embedded_enabled}}"
   become: true
 
 

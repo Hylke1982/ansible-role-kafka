@@ -1,0 +1,2 @@
+zookeeper_embedded_enabled: yes
+zookeeper_embedded_state: started

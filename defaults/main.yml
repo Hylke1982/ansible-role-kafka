@@ -6,4 +6,10 @@ kafka_file_prefix: kafka_2.12-1.0.0
 kafka_download_url: "http://mirror.koddos.net/apache/kafka/1.0.0/{{ kafka_file_prefix }}.tgz"
 kafka_app_home: "{{ kafka_home }}/kafka"
 
+kafka_embedded_enabled: no
+kafka_embedded_state: stopped
+
+zookeeper_embedded_enabled: no
+zookeeper_embedded_state: stopped
+
 embedded_zookeeper_enabled: true
