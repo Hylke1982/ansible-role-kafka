@@ -47,6 +47,12 @@
     line: "#broker.id=-1"
   become: true
 
+- name: "Update Kafka topic auto creations set it to false"
+  lineinfile:
+    path: "{{ kafka_app_home }}/config/server.properties"
+    line: "auto.create.topics.enable=false"
+  become: true
+
 - name: "Copy update kafka property script"
   copy:
     src: update-kafka-property.sh
