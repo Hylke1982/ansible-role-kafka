@@ -3,7 +3,7 @@ kafka_group: kafka
 kafka_home: /opt/kafka
 kafka_broker_count: 1
 
-kafka_file_prefix: kafka_2.12-1.0.0
+kafka_file_prefix: kafka_2.12-1.1.0
 kafka_download_url: "http://mirror.koddos.net/apache/kafka/1.0.0/{{ kafka_file_prefix }}.tgz"
 kafka_app_home: "{{ kafka_home }}/kafka"
 kafka_log_dir: "/tmp/kafka-logs"
