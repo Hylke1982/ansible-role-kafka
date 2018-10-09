@@ -1,3 +1,9 @@
+- name: "Install NTP"
+  package:
+    name: "npt"
+    state: "latest"
+  become: true
+
 - name: Include vars of stuff.yml into the 'stuff' variable (2.2).
   include_vars:
     file: zookeeper_embedded_enabled.yml
