@@ -1,6 +1,6 @@
 - name: "Install NTP"
   package:
-    name: "npt"
+    name: "ntp"
     state: "latest"
   become: true
 
